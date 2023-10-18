@@ -52,8 +52,8 @@ class UserData : Fragment() {
 
         setUpRecyclerView()
         coroutineScope.launch {
-            viewModel.getUser(1)
-            viewModel.getAlbums(1)
+            viewModel.getUser(3)
+
         }
         getUserData()
         getAlbums()
@@ -75,6 +75,7 @@ class UserData : Fragment() {
                                 Log.d(ContentValues.TAG, "UserData${it}")
                                 binding?.userName?.text=it?.name
                                 binding?.userAddress?.text=it?.address?.city
+                                viewModel.getAlbums(it!!.id)
                             }
                         }
 
