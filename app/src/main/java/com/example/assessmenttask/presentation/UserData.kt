@@ -7,8 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assessmenttask.MainActivity
-import com.example.assessmenttask.R
+import com.example.assessmenttask.adapters.AlbumsAdapter
 import com.example.assessmenttask.databinding.FragmentUserDataBinding
 import com.example.assessmenttask.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,8 +17,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Exception
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 @AndroidEntryPoint
@@ -26,6 +25,9 @@ class UserData : Fragment() {
     private val binding get() = _binding
 
     private lateinit var viewModel: UserViewModel
+
+    private lateinit var adapter: AlbumsAdapter
+
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
 
@@ -47,13 +49,19 @@ class UserData : Fragment() {
         viewModel = (activity as MainActivity).userViewModel
         Log.d(ContentValues.TAG, "UserData")
 
+
+        setUpRecyclerView()
         coroutineScope.launch {
             viewModel.getUser(1)
+            viewModel.getAlbums(1)
         }
         getUserData()
+        getAlbums()
+
+
     }
 
-    fun getUserData() {
+    private fun getUserData() {
         coroutineScope.launch {
             Log.d(ContentValues.TAG, "UserData")
 
@@ -65,16 +73,17 @@ class UserData : Fragment() {
 
                             response.data.let {
                                 Log.d(ContentValues.TAG, "UserData${it}")
-
+                                binding?.userName?.text=it?.name
+                                binding?.userAddress?.text=it?.address?.city
                             }
                         }
 
                         is Resource.Error -> {
-                            Log.d(ContentValues.TAG, "Prayers failed${response.message}")
+                            Log.d(ContentValues.TAG, "failed${response.message}")
                         }
 
                         is Resource.Loading -> {
-                            Log.d(ContentValues.TAG, "Prayers loading")
+                            Log.d(ContentValues.TAG, "loading")
                         }
 
                         else -> {
@@ -87,5 +96,47 @@ class UserData : Fragment() {
                 e.stackTrace
             }
         }
+    }
+
+    private fun getAlbums() {
+        coroutineScope.launch {
+            Log.d(ContentValues.TAG, "Albums")
+
+            try {
+                viewModel.album.collect { response ->
+
+                    when (response) {
+                        is Resource.Success -> {
+
+                            response.data.let {
+                                Log.d(ContentValues.TAG, "Albums${it}")
+                                adapter.difference.submitList(it)
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            Log.d(ContentValues.TAG, "failed${response.message}")
+                        }
+
+                        is Resource.Loading -> {
+                            Log.d(ContentValues.TAG, "loading")
+                        }
+
+                        else -> {
+                            Log.d(ContentValues.TAG, "${response.message}")
+
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.stackTrace
+            }
+        }
+    }
+
+    private fun setUpRecyclerView() {
+        adapter = AlbumsAdapter()
+        binding?.albumsLayout?.rvAlbums?.adapter = adapter
+        binding?.albumsLayout?.rvAlbums?.layoutManager = LinearLayoutManager(activity)
     }
 }

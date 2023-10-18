@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.example.assessmenttask.di.RetrofitQ
 import com.example.assessmenttask.domain.UrlProvider
+import com.example.assessmenttask.domain.album.AlbumAPI
 import com.example.assessmenttask.domain.user.UserAPI
 import dagger.Module
 import dagger.Provides
@@ -26,21 +27,6 @@ class AppModule {
             .build()
     }
 
-   /* @Provides
-    @AppScope
-    fun provideDataBase(@ApplicationContext context:Context):PrayerDB =
-        Room.databaseBuilder(
-            context,
-            PrayerDB::class.java , DATABASE_NAME
-        ).fallbackToDestructiveMigration().build()
-
-
-    @Provides
-    @AppScope
-    fun provideActionDao(db: PrayerDB): PrayersDao {
-        return db.getPrayersDao()
-    }*/
-
     @Provides
     @AppScope
     fun urlProvider()=UrlProvider()
@@ -48,6 +34,10 @@ class AppModule {
     @Provides
     @AppScope
     fun userAPI(@RetrofitQ retrofit: Retrofit) =retrofit.create(UserAPI::class.java)
+
+    @Provides
+    @AppScope
+    fun albumAPI(@RetrofitQ retrofit: Retrofit) =retrofit.create(AlbumAPI::class.java)
 
 
     @Provides

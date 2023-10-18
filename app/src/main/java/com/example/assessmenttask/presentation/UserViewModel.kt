@@ -5,8 +5,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.lifecycle.ViewModel
+import com.example.assessmenttask.domain.album.AlbumRepo
+import com.example.assessmenttask.domain.album.AlbumUseCase
 import com.example.assessmenttask.domain.user.UserRepo
 import com.example.assessmenttask.domain.user.UserUseCase
+import com.example.assessmenttask.model.albums.Album
 import com.example.assessmenttask.model.user.UserItem
 import com.example.assessmenttask.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,15 +25,21 @@ import javax.inject.Inject
 class UserViewModel @Inject constructor(
     private val userRepo: UserRepo,
     private val getUserUseCase: UserUseCase,
-    private val context: Context
+    private val context: Context,
+    private val albumRepo: AlbumRepo,
+    private val albumUseCase: AlbumUseCase,
 
-):ViewModel() {
+
+    ) : ViewModel() {
 
     private val _user = MutableStateFlow<Resource<UserItem>>(Resource.Empty())
     val user: StateFlow<Resource<UserItem>> = _user
 
-     suspend fun getUser(
-         id:Int
+    private val _album = MutableStateFlow<Resource<Album>>(Resource.Empty())
+    val album: StateFlow<Resource<Album>> = _album
+
+    suspend fun getUser(
+        id: Int
     ) =
         withContext(Dispatchers.Default) {
             try {
@@ -50,6 +59,25 @@ class UserViewModel @Inject constructor(
                 }
             }
         }
+
+    suspend fun getAlbums(id: Int) = withContext(Dispatchers.Default) {
+        try {
+            if (isNetworkConnected(context)) {
+                _album.value = Resource.Loading()
+                _album.value = albumUseCase.handleAlbumResponse(
+                    albumRepo.getAlbumsByUserId(id)
+                )
+            } else {
+                _album.value = (Resource.Error("No internet connection"))
+            }
+
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> _album.value = Resource.Error("Network Failure")
+                else -> _album.value = Resource.Error("Conversion Error ${t.message}")
+            }
+        }
+    }
 
     private fun isNetworkConnected(context: Context): Boolean {
         val connectivityManager =
