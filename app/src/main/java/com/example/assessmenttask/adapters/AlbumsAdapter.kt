@@ -8,13 +8,16 @@ import com.example.assessmenttask.databinding.AlbumItemBinding
 import com.example.assessmenttask.model.albums.AlbumItem
 
 
-class AlbumsAdapter : BaseAdapter<AlbumItem>() {
+class AlbumsAdapter(albumCL: AlbumClickListener) : BaseAdapter<AlbumItem>() {
 
+    private val albumClickListener = albumCL
     inner class NewsViewHolder(private val binding: AlbumItemBinding) :
         GenericViewHolder<AlbumItem>(binding.root) {
         override fun onBind(item: AlbumItem) {
             binding.apply {
                 albumName.text=item.title
+                itemObj=item
+                clickListener=albumClickListener
             }
         }
     }

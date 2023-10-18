@@ -7,12 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.assessmenttask.R
-import com.example.assessmenttask.adapters.AlbumsAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.assessmenttask.MainActivity
+import com.example.assessmenttask.adapters.PhotosAdapter
 import com.example.assessmenttask.databinding.FragmentPhotosBinding
-import com.example.assessmenttask.databinding.FragmentUserDataBinding
-import com.example.assessmenttask.databinding.PhotosLayoutBinding
-import com.example.assessmenttask.presentation.userdata.UserViewModel
 import com.example.assessmenttask.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +27,7 @@ class PhotosFragment : Fragment() {
 
     private lateinit var viewModel: PhotosViewModel
 
-    private lateinit var adapter: AlbumsAdapter
+    private lateinit var adapter: PhotosAdapter
 
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
@@ -47,40 +45,60 @@ class PhotosFragment : Fragment() {
         return binding?.root
     }
 
-    private fun getPhotos() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = (activity as MainActivity).photosViewModel
+        Log.d(ContentValues.TAG, "UserData")
+
+
+        setUpPhotosRecyclerView()
         coroutineScope.launch {
-            Log.d(ContentValues.TAG, "Photos")
 
-            try {
-                viewModel.photos.collect { response ->
 
-                    when (response) {
-                        is Resource.Success -> {
-
-                            response.data.let {
-                                Log.d(ContentValues.TAG, "Photos${it}")
-
-                            }
-                        }
-
-                        is Resource.Error -> {
-                            Log.d(ContentValues.TAG, "failed${response.message}")
-                        }
-
-                        is Resource.Loading -> {
-                            Log.d(ContentValues.TAG, "loading")
-                        }
-
-                        else -> {
-                            Log.d(ContentValues.TAG, "${response.message}")
-
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                e.stackTrace
-            }
         }
     }
 
-}
+
+
+        private fun getPhotos() {
+            coroutineScope.launch {
+                Log.d(ContentValues.TAG, "Photos")
+
+                try {
+                    viewModel.photos.collect { response ->
+
+                        when (response) {
+                            is Resource.Success -> {
+
+                                response.data.let {
+                                    Log.d(ContentValues.TAG, "Photos${it}")
+
+                                }
+                            }
+
+                            is Resource.Error -> {
+                                Log.d(ContentValues.TAG, "failed${response.message}")
+                            }
+
+                            is Resource.Loading -> {
+                                Log.d(ContentValues.TAG, "loading")
+                            }
+
+                            else -> {
+                                Log.d(ContentValues.TAG, "${response.message}")
+
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.stackTrace
+                }
+            }
+        }
+
+        private fun setUpPhotosRecyclerView() {
+            adapter = PhotosAdapter()
+            binding?.photosLayout?.rvPhotos?.adapter = adapter
+            binding?.photosLayout?.rvPhotos?.layoutManager = LinearLayoutManager(activity)
+        }
+    }
