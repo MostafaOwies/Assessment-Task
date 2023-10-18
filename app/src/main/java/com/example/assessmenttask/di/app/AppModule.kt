@@ -5,6 +5,7 @@ import android.content.Context
 import com.example.assessmenttask.di.RetrofitQ
 import com.example.assessmenttask.domain.UrlProvider
 import com.example.assessmenttask.domain.album.AlbumAPI
+import com.example.assessmenttask.domain.photo.PhotoAPI
 import com.example.assessmenttask.domain.user.UserAPI
 import dagger.Module
 import dagger.Provides
@@ -38,6 +39,11 @@ class AppModule {
     @Provides
     @AppScope
     fun albumAPI(@RetrofitQ retrofit: Retrofit) =retrofit.create(AlbumAPI::class.java)
+
+@Provides
+    @AppScope
+    fun photoAPI(@RetrofitQ retrofit: Retrofit) =retrofit.create(PhotoAPI::class.java)
+
 
 
     @Provides

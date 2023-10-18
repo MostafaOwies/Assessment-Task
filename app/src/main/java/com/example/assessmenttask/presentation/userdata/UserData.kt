@@ -1,4 +1,4 @@
-package com.example.assessmenttask.presentation
+package com.example.assessmenttask.presentation.userdata
 
 import android.content.ContentValues
 import android.os.Bundle
@@ -53,6 +53,8 @@ class UserData : Fragment() {
         setUpRecyclerView()
         coroutineScope.launch {
             viewModel.getUser(3)
+            viewModel.getPhotos(3)
+
 
         }
         getUserData()
@@ -109,7 +111,7 @@ class UserData : Fragment() {
                     when (response) {
                         is Resource.Success -> {
 
-                            response.data.let {
+                            response.data.let { it ->
                                 Log.d(ContentValues.TAG, "Albums${it}")
                                 adapter.difference.submitList(it)
                             }
@@ -134,6 +136,8 @@ class UserData : Fragment() {
             }
         }
     }
+
+
 
     private fun setUpRecyclerView() {
         adapter = AlbumsAdapter()

@@ -1,4 +1,4 @@
-package com.example.assessmenttask.presentation
+package com.example.assessmenttask.presentation.userdata
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,9 +7,12 @@ import android.net.NetworkCapabilities
 import androidx.lifecycle.ViewModel
 import com.example.assessmenttask.domain.album.AlbumRepo
 import com.example.assessmenttask.domain.album.AlbumUseCase
+import com.example.assessmenttask.domain.photo.PhotoRepo
+import com.example.assessmenttask.domain.photo.PhotoUseCase
 import com.example.assessmenttask.domain.user.UserRepo
 import com.example.assessmenttask.domain.user.UserUseCase
 import com.example.assessmenttask.model.albums.Album
+import com.example.assessmenttask.model.photos.Photos
 import com.example.assessmenttask.model.user.UserItem
 import com.example.assessmenttask.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,14 +32,21 @@ class UserViewModel @Inject constructor(
     private val albumRepo: AlbumRepo,
     private val albumUseCase: AlbumUseCase,
 
+    private val photoRepo: PhotoRepo,
+    private val photoUseCase: PhotoUseCase
 
-    ) : ViewModel() {
+
+) : ViewModel() {
 
     private val _user = MutableStateFlow<Resource<UserItem>>(Resource.Empty())
     val user: StateFlow<Resource<UserItem>> = _user
 
     private val _album = MutableStateFlow<Resource<Album>>(Resource.Empty())
     val album: StateFlow<Resource<Album>> = _album
+
+
+    private val _photos = MutableStateFlow<Resource<Photos>>(Resource.Empty())
+    val photos: StateFlow<Resource<Photos>> = _photos
 
     suspend fun getUser(
         id: Int
@@ -75,6 +85,25 @@ class UserViewModel @Inject constructor(
             when (t) {
                 is IOException -> _album.value = Resource.Error("Network Failure")
                 else -> _album.value = Resource.Error("Conversion Error ${t.message}")
+            }
+        }
+    }
+
+    suspend fun getPhotos(id: Int) = withContext(Dispatchers.Default) {
+        try {
+            if (isNetworkConnected(context)) {
+                _photos.value = Resource.Loading()
+                _photos.value = photoUseCase.handlePhotosResponse(
+                    photoRepo.getPhotosByAlbum(id)
+                )
+            } else {
+                _photos.value = (Resource.Error("No internet connection"))
+            }
+
+        } catch (t: Throwable) {
+            when (t) {
+                is IOException -> _photos.value = Resource.Error("Network Failure")
+                else -> _photos.value = Resource.Error("Conversion Error ${t.message}")
             }
         }
     }

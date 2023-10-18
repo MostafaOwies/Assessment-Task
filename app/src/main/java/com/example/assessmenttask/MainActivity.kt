@@ -3,7 +3,7 @@ package com.example.assessmenttask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.example.assessmenttask.presentation.UserViewModel
+import com.example.assessmenttask.presentation.userdata.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
