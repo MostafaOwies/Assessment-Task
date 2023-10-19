@@ -29,6 +29,7 @@ class PhotosFragment : Fragment() {
     private lateinit var viewModel: PhotosViewModel
     private lateinit var adapter: PhotosAdapter
     private lateinit var albumId: String
+    private lateinit var albumTitle: String
     private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
 
     /*override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,6 +64,8 @@ class PhotosFragment : Fragment() {
         arguments?.let { bundle ->
             if (bundle.containsKey(Constants.ID)) {
                 albumId = bundle.getString(Constants.ID).toString()
+                albumTitle = bundle.getString(Constants.ALBUM_TITLE).toString()
+                binding?.albumTitle?.text = albumTitle
                 viewModel.getPhotos(albumId.toInt())
             }
         }

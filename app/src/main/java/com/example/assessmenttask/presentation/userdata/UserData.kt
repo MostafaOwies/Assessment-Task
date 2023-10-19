@@ -145,6 +145,10 @@ class UserData : Fragment(), AlbumClickListener {
             Constants.ID,
             albumItem.id.toString()
         )
+        bundle.putString(
+            Constants.ALBUM_TITLE,
+            albumItem.title
+        )
         Navigation.navToPhotosFragment(findNavController(), bundle)
     }
 
