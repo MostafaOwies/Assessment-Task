@@ -1,48 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.userdata.UserData">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fillViewport="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="12dp">
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/user_name"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:layout_margin="@dimen/pad_small"
+                android:text=""
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/pad_xlarge"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/user_address"
-                app:layout_constraintTop_toBottomOf="@id/user_name"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:layout_marginStart="@dimen/pad_small"
+                android:layout_marginEnd="@dimen/pad_small"
+                android:layout_marginBottom="@dimen/pad_small"
+                android:text=""
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/txt_small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/user_name" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/user_albums"
-                app:layout_constraintTop_toBottomOf="@id/user_address"
-                app:layout_constraintStart_toStartOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/my_albums" />
+                android:layout_margin="@dimen/pad_small"
+                android:text="@string/my_albums"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/txt_large"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/user_address" />
+
             <include
                 android:id="@+id/albums_layout"
                 layout="@layout/albums_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/pad_small"/>
+                android:layout_height="wrap_content" />
 
 
         </LinearLayout>

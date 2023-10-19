@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
 
         <variable
@@ -13,24 +13,35 @@
             type="com.example.assessmenttask.adapters.AlbumClickListener" />
 
 
-
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{()-> clickListener.onItemClicked(itemObj.id,itemObj)}"
+        android:layout_margin="@dimen/pad_small"
+        app:cardCornerRadius="@dimen/pad_small"
+        app:cardElevation="@dimen/pad_small">
 
-        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{()-> clickListener.onItemClicked(itemObj.id,itemObj)}"
+            >
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/album_name"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:padding="@dimen/pad_xxlarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/album_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_xxlarge"
+                android:layout_marginStart="@dimen/pad_med"
+                android:text=""
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/txt_large"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </layout>
