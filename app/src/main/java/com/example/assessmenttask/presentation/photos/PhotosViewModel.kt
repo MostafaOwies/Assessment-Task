@@ -21,7 +21,7 @@ class PhotosViewModel @Inject constructor(
     private val context: Context,
     private val photoRepo: PhotoRepo,
     private val photoUseCase: PhotoUseCase
-) : ViewModel(){
+) : ViewModel() {
 
     private val _photos = MutableStateFlow<Resource<Photos>>(Resource.Empty())
     val photos: StateFlow<Resource<Photos>> = _photos

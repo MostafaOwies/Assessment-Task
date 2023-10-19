@@ -21,8 +21,8 @@ class AppModule {
     @Provides
     @AppScope
     @RetrofitQ
-    fun provideRetrofit(urlProvider: UrlProvider) :Retrofit {
-        return  Retrofit.Builder()
+    fun provideRetrofit(urlProvider: UrlProvider): Retrofit {
+        return Retrofit.Builder()
             .baseUrl(urlProvider.getBaseUrl())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -30,20 +30,19 @@ class AppModule {
 
     @Provides
     @AppScope
-    fun urlProvider()=UrlProvider()
+    fun urlProvider() = UrlProvider()
 
     @Provides
     @AppScope
-    fun userAPI(@RetrofitQ retrofit: Retrofit) =retrofit.create(UserAPI::class.java)
+    fun userAPI(@RetrofitQ retrofit: Retrofit) = retrofit.create(UserAPI::class.java)
 
     @Provides
     @AppScope
-    fun albumAPI(@RetrofitQ retrofit: Retrofit) =retrofit.create(AlbumAPI::class.java)
+    fun albumAPI(@RetrofitQ retrofit: Retrofit) = retrofit.create(AlbumAPI::class.java)
 
-@Provides
+    @Provides
     @AppScope
-    fun photoAPI(@RetrofitQ retrofit: Retrofit) =retrofit.create(PhotoAPI::class.java)
-
+    fun photoAPI(@RetrofitQ retrofit: Retrofit) = retrofit.create(PhotoAPI::class.java)
 
 
     @Provides

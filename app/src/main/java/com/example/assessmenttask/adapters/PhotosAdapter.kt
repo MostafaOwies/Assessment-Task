@@ -4,9 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
-import com.example.assessmenttask.databinding.AlbumItemBinding
 import com.example.assessmenttask.databinding.PhotoItemBinding
-import com.example.assessmenttask.model.albums.AlbumItem
 import com.example.assessmenttask.model.photos.PhotosItem
 
 class PhotosAdapter : BaseAdapter<PhotosItem>() {
@@ -15,7 +13,7 @@ class PhotosAdapter : BaseAdapter<PhotosItem>() {
         GenericViewHolder<PhotosItem>(binding.root) {
         override fun onBind(item: PhotosItem) {
             binding.apply {
-                photoName.text=item.title
+                photoName.text = item.title
             }
         }
     }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assessmenttask.MainActivity
 import com.example.assessmenttask.adapters.PhotosAdapter
 import com.example.assessmenttask.databinding.FragmentPhotosBinding
+import com.example.assessmenttask.utils.Constants
 import com.example.assessmenttask.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -24,18 +25,14 @@ class PhotosFragment : Fragment() {
 
     private var _binding: FragmentPhotosBinding? = null
     private val binding get() = _binding
-
     private lateinit var viewModel: PhotosViewModel
-
     private lateinit var adapter: PhotosAdapter
-
-
+    private lateinit var albumId: String
     private val coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-    }
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,52 +50,67 @@ class PhotosFragment : Fragment() {
 
         setUpPhotosRecyclerView()
         coroutineScope.launch {
-
-
+            initViews()
         }
+
+        getPhotos()
+
     }
 
-
-
-        private fun getPhotos() {
-            coroutineScope.launch {
-                Log.d(ContentValues.TAG, "Photos")
-
-                try {
-                    viewModel.photos.collect { response ->
-
-                        when (response) {
-                            is Resource.Success -> {
-
-                                response.data.let {
-                                    Log.d(ContentValues.TAG, "Photos${it}")
-
-                                }
-                            }
-
-                            is Resource.Error -> {
-                                Log.d(ContentValues.TAG, "failed${response.message}")
-                            }
-
-                            is Resource.Loading -> {
-                                Log.d(ContentValues.TAG, "loading")
-                            }
-
-                            else -> {
-                                Log.d(ContentValues.TAG, "${response.message}")
-
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.stackTrace
-                }
+    private suspend fun initViews() {
+        arguments?.let { bundle ->
+            if (bundle.containsKey(Constants.ID)) {
+                albumId = bundle.getString(Constants.ID).toString()
+                viewModel.getPhotos(albumId.toInt())
             }
         }
+    }
 
-        private fun setUpPhotosRecyclerView() {
-            adapter = PhotosAdapter()
-            binding?.photosLayout?.rvPhotos?.adapter = adapter
-            binding?.photosLayout?.rvPhotos?.layoutManager = LinearLayoutManager(activity)
+
+    private fun getPhotos() {
+        coroutineScope.launch {
+            // Log.d(ContentValues.TAG, "Photos")
+
+            try {
+                viewModel.photos.collect { response ->
+
+                    when (response) {
+                        is Resource.Success -> {
+
+                            response.data.let {
+                                // Log.d(ContentValues.TAG, "Photos${it}")
+                                adapter.difference.submitList(it)
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            Log.d(ContentValues.TAG, "failed${response.message}")
+                        }
+
+                        is Resource.Loading -> {
+                            Log.d(ContentValues.TAG, "loading")
+                        }
+
+                        else -> {
+                            Log.d(ContentValues.TAG, "${response.message}")
+
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.stackTrace
+            }
         }
     }
+
+    private fun setUpPhotosRecyclerView() {
+        adapter = PhotosAdapter()
+        binding?.photosLayout?.rvPhotos?.adapter = adapter
+        binding?.photosLayout?.rvPhotos?.layoutManager = LinearLayoutManager(activity)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding?.unbind()
+    }
+}

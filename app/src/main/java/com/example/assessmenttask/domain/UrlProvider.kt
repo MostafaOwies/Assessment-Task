@@ -5,7 +5,7 @@ import com.example.assessmenttask.utils.Constants
 
 class UrlProvider {
 
-    fun getBaseUrl() :String {
+    fun getBaseUrl(): String {
 
         return Constants.BASE_URL
     }

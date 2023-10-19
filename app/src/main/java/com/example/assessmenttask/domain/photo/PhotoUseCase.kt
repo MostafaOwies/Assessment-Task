@@ -2,7 +2,6 @@ package com.example.assessmenttask.domain.photo
 
 import android.content.ContentValues
 import android.util.Log
-import com.example.assessmenttask.model.albums.Album
 import com.example.assessmenttask.model.photos.Photos
 import com.example.assessmenttask.utils.Resource
 import kotlinx.coroutines.CancellationException
