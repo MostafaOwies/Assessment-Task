@@ -15,33 +15,31 @@
 
     </data>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/item"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/pad_small"
-        app:cardCornerRadius="@dimen/pad_small"
-        app:cardElevation="@dimen/pad_small">
+        android:onClick="@{()-> clickListener.onItemClicked(itemObj.id,itemObj)}">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/album_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/pad_small"
+            android:paddingVertical="@dimen/pad_xlarge"
+            android:text=""
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/txt_large"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{()-> clickListener.onItemClicked(itemObj.id,itemObj)}"
-            >
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/album_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/pad_xxlarge"
-                android:layout_marginStart="@dimen/pad_med"
-                android:text=""
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/txt_large"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-
+            app:dividerInsetEnd="@dimen/pad_small"
+            app:dividerInsetStart="@dimen/pad_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/album_name" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
