@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.example.assessmenttask.databinding.PhotoItemBinding
+import com.example.assessmenttask.model.photos.Photos
 import com.example.assessmenttask.model.photos.PhotosItem
 
 class PhotosAdapter : BaseAdapter<PhotosItem>() {
@@ -27,6 +28,7 @@ class PhotosAdapter : BaseAdapter<PhotosItem>() {
             return oldItem == newItem
         }
     }
+    private var originalList: List<PhotosItem> = emptyList()
     val difference = AsyncListDiffer(this, differenceCallBack)
 
     override fun setViewHolder(parent: ViewGroup, viewType: Int): GenericViewHolder<PhotosItem> {
@@ -41,5 +43,19 @@ class PhotosAdapter : BaseAdapter<PhotosItem>() {
 
     override fun setItem(): MutableList<PhotosItem> {
         return difference.currentList
+    }
+
+    fun submitList(list: Photos) {
+        originalList = list
+        difference.submitList(list)
+    }
+
+    fun filter(query: String) {
+        val filteredList = if (query.isEmpty()) {
+            originalList
+        } else {
+            originalList.filter { it.title.contains(query, ignoreCase = true) }
+        }
+        difference.submitList(filteredList)
     }
 }

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assessmenttask.MainActivity
 import com.example.assessmenttask.adapters.PhotosAdapter
@@ -49,6 +50,7 @@ class PhotosFragment : Fragment() {
 
 
         setUpPhotosRecyclerView()
+        setupSearchView()
         coroutineScope.launch {
             initViews()
         }
@@ -80,6 +82,7 @@ class PhotosFragment : Fragment() {
                             response.data.let {
                                 // Log.d(ContentValues.TAG, "Photos${it}")
                                 adapter.difference.submitList(it)
+                                adapter.submitList(it!!)
                             }
                         }
 
@@ -107,6 +110,21 @@ class PhotosFragment : Fragment() {
         adapter = PhotosAdapter()
         binding?.photosLayout?.rvPhotos?.adapter = adapter
         binding?.photosLayout?.rvPhotos?.layoutManager = LinearLayoutManager(activity)
+    }
+
+    private fun setupSearchView() {
+        binding?.searchLayout?.searchView?.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener,
+            android.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filter(newText)
+                return false
+            }
+        })
     }
 
     override fun onDestroyView() {
