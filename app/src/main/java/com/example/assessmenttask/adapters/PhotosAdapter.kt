@@ -1,20 +1,28 @@
 package com.example.assessmenttask.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import com.bumptech.glide.Glide
 import com.example.assessmenttask.databinding.PhotoItemBinding
 import com.example.assessmenttask.model.photos.Photos
 import com.example.assessmenttask.model.photos.PhotosItem
 
 class PhotosAdapter : BaseAdapter<PhotosItem>() {
 
-    inner class NewsViewHolder(private val binding: PhotoItemBinding) :
+    inner class NewsViewHolder(
+        private val binding: PhotoItemBinding,
+        private val context: Context
+    ) :
         GenericViewHolder<PhotosItem>(binding.root) {
         override fun onBind(item: PhotosItem) {
             binding.apply {
-                photoName.text = item.title
+                //photoName.text = item.title
+                Glide.with(context)
+                    .load(item.url)
+                    .into(binding.photoIv)
             }
         }
     }
@@ -37,7 +45,8 @@ class PhotosAdapter : BaseAdapter<PhotosItem>() {
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            parent.context
         )
     }
 

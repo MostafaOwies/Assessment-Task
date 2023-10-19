@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.assessmenttask.MainActivity
 import com.example.assessmenttask.adapters.PhotosAdapter
 import com.example.assessmenttask.databinding.FragmentPhotosBinding
@@ -112,7 +111,6 @@ class PhotosFragment : Fragment() {
     private fun setUpPhotosRecyclerView() {
         adapter = PhotosAdapter()
         binding?.photosLayout?.rvPhotos?.adapter = adapter
-        binding?.photosLayout?.rvPhotos?.layoutManager = LinearLayoutManager(activity)
     }
 
     private fun setupSearchView() {

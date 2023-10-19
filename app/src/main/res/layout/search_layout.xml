@@ -8,7 +8,7 @@
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/pad_med"
+        android:layout_marginHorizontal="@dimen/pad_small"
         android:layout_marginTop="@dimen/pad_xlarge"
         android:layout_marginBottom="@dimen/pad_xlarge"
         android:background="@drawable/search_shape"
